@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Catálogo de Pasteles</title>
+  <meta name="description" content="Catálogo de pasteles de gelatina: sabores, tamaños y precios.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --fondo: #fffaf7;
+      --rosa: #f8e8ee;
+      --rosa-fuerte: #c95c7c;
+      --dorado: #d4af37;
+      --dorado-oscuro: #9b741f;
+      --texto: #49383b;
+      --gris: #746a6d;
+      --blanco: #ffffff;
+      --sombra: 0 14px 34px rgba(78, 49, 58, 0.13);
+      --radio: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      color: var(--texto);
+      font-family: "Quicksand", sans-serif;
+      line-height: 1.5;
+      background:
+        radial-gradient(circle at top left, rgba(248, 232, 238, .95), transparent 35%),
+        linear-gradient(180deg, #fffdfb 0%, #fff7f9 58%, #f8e8ee 100%);
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .pagina {
+      width: min(95%, 860px);
+      margin: 0 auto;
+      padding: 24px 0 46px;
+    }
+
+    .encabezado {
+      padding: 24px 18px 30px;
+      text-align: center;
+    }
+
+    .encabezado__detalle {
+      display: inline-block;
+      margin-bottom: 10px;
+      color: var(--dorado-oscuro);
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .18rem;
+      text-transform: uppercase;
+    }
+
+    .encabezado h1 {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(2.2rem, 10vw, 4rem);
+      line-height: 1.05;
+    }
+
+    .encabezado p {
+      max-width: 560px;
+      margin: 12px auto 0;
+      color: var(--gris);
+      font-size: .95rem;
+    }
+
+    .separador {
+      width: 90px;
+      height: 2px;
+      margin: 18px auto 0;
+      background: linear-gradient(90deg, transparent, var(--dorado), transparent);
+    }
+
+    .sabor {
+      margin-bottom: 28px;
+      padding: 18px;
+      border: 1px solid rgba(212, 175, 55, .45);
+      border-radius: var(--radio);
+      background: rgba(255, 255, 255, .92);
+      box-shadow: var(--sombra);
+    }
+
+    .sabor__cabecera {
+      padding: 4px 4px 18px;
+      text-align: center;
+    }
+
+    .sabor__cabecera span {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--dorado-oscuro);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .16rem;
+      text-transform: uppercase;
+    }
+
+    .sabor__cabecera h2 {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(1.7rem, 7vw, 2.4rem);
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    .presentaciones {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .producto {
+      overflow: hidden;
+      border: 1px solid rgba(212, 175, 55, .38);
+      border-radius: 20px;
+      background: var(--blanco);
+      box-shadow: 0 9px 24px rgba(72, 48, 56, .10);
+    }
+
+    .oculto {
+      display: none !important;
+    }
+
+    .foto {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: linear-gradient(145deg, #fff, var(--rosa));
+      border-bottom: 1px solid rgba(212, 175, 55, .35);
+    }
+
+    .foto img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .producto__contenido {
+      padding: 17px;
+    }
+
+    .producto__superior {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .producto__nombre {
+      font-family: "Playfair Display", serif;
+      font-size: 1.42rem;
+      line-height: 1.08;
+    }
+
+    .producto__porciones {
+      display: inline-flex;
+      margin-top: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--rosa);
+      color: var(--gris);
+      font-size: .8rem;
+      font-weight: 700;
+    }
+
+    .producto__precio {
+      flex-shrink: 0;
+      color: var(--dorado-oscuro);
+      font-size: clamp(1.85rem, 9vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -.05rem;
+    }
+
+    .producto__precio span {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--gris);
+      font-size: .62rem;
+      letter-spacing: .08rem;
+      text-align: right;
+      text-transform: uppercase;
+    }
+
+    .proximamente {
+      margin: 32px 0 24px;
+      padding: 30px 20px;
+      border: 1px solid rgba(212, 175, 55, .6);
+      border-radius: var(--radio);
+      background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(248,232,238,.96));
+      box-shadow: var(--sombra);
+      text-align: center;
+    }
+
+    .proximamente h2 {
+      font-family: "Playfair Display", serif;
+      font-size: 1.65rem;
+    }
+
+    .proximamente p {
+      margin-top: 7px;
+      color: var(--gris);
+      font-size: .9rem;
+    }
+
+    .cta {
+      position: sticky;
+      bottom: 14px;
+      z-index: 10;
+      margin-top: 18px;
+    }
+
+    .cta a {
+      display: flex;
+      min-height: 62px;
+      align-items: center;
+      justify-content: center;
+      padding: 15px 20px;
+      border-radius: 999px;
+      color: #fff;
+      background: linear-gradient(135deg, #d46a89, #b84467);
+      box-shadow: 0 14px 28px rgba(184, 68, 103, .34);
+      font-size: 1rem;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .numero-contacto {
+      margin-top: 18px;
+      color: var(--texto);
+      font-size: 1rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .nota {
+      margin-top: 8px;
+      color: var(--gris);
+      font-size: .72rem;
+      text-align: center;
+    }
+
+    @media (min-width: 600px) {
+      .presentaciones {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .sabor {
+        padding: 23px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="pagina">
+
+    <header class="encabezado">
+      <span class="encabezado__detalle">Catálogo digital Tu Dolce Jelly</span>
+      <h1>Nuestros pasteles</h1>
+      <p>Selecciona tu sabor y la presentación ideal para cada ocasión.</p>
+      <div class="separador"></div>
+    </header>
+
+    <!-- FLAN -->
+    <section class="sabor">
+      <div class="sabor__cabecera">
+        <span>Sabor clásico</span>
+        <h2>Flan</h2>
+      </div>
+
+      <div class="presentaciones">
+
+        <!-- PERSONAL OCULTO -->
+        <article class="producto oculto">
+          <div class="producto__contenido">
+            <h3 class="producto__nombre">Personal</h3>
+            <span class="producto__porciones">2 porciones</span>
+            <div class="producto__precio"><span>Precio</span>Q 0</div>
+          </div>
+        </article>
+
+        <!-- PEQUEÑO OCULTO -->
+        <article class="producto oculto">
+          <div class="producto__contenido">
+            <h3 class="producto__nombre">Pequeño</h3>
+            <span class="producto__porciones">8 porciones</span>
+            <div class="producto__precio"><span>Precio</span>Q 190</div>
+          </div>
+        </article>
+
+        <!-- FLAN MEDIANO -->
+        <article class="producto">
+          <div class="foto">
+            <img src="imagenes/flan-mediano.jpeg" alt="Pastel de flan mediano, 14 porciones">
+          </div>
+          <div class="producto__contenido">
+            <div class="producto__superior">
+              <div>
+                <h3 class="producto__nombre">Mediano</h3>
+                <span class="producto__porciones">🍰 14 porciones</span>
+              </div>
+              <div class="producto__precio">
+                <span>Precio</span>
+                Q 250
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- FLAN GRANDE -->
+        <article class="producto">
+          <div class="foto">
+            <img src="imagenes/flan-grande.jpg" alt="Pastel de flan grande, 24 porciones">
+          </div>
+          <div class="producto__contenido">
+            <div class="producto__superior">
+              <div>
+                <h3 class="producto__nombre">Grande</h3>
+                <span class="producto__porciones">🍰 24 porciones</span>
+              </div>
+              <div class="producto__precio">
+                <span>Precio</span>
+                Q 360
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- MELOCOTON ó FRESAS -->
+    <section class="sabor">
+      <div class="sabor__cabecera">
+        <span>Sabor frutal</span>
+        <h2>Melocoton ó Fresas</h2>
+      </div>
+
+      <div class="presentaciones">
+
+        <!-- PERSONAL OCULTO -->
+        <article class="producto oculto">
+          <div class="producto__contenido">
+            <h3 class="producto__nombre">Personal</h3>
+            <span class="producto__porciones">2 porciones</span>
+            <div class="producto__precio"><span>Precio</span>Q 30</div>
+          </div>
+        </article>
+
+        <!-- PEQUEÑO -->
+        <article class="producto">
+          <div class="foto">
+            <img src="imagenes/melocoton-pequeno.jpeg" alt="Pastel pequeño de melocotón, 8 porciones">
+          </div>
+          <div class="producto__contenido">
+            <div class="producto__superior">
+              <div>
+                <h3 class="producto__nombre">Pequeño</h3>
+                <span class="producto__porciones">🍰 8 porciones</span>
+              </div>
+              <div class="producto__precio">
+                <span>Precio</span>
+                Q 90
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- MEDIANO -->
+        <article class="producto">
+          <div class="foto">
+            <img src="imagenes/fresas-mediano.jpeg" alt="Pastel mediano de fresa, 14 porciones">
+          </div>
+          <div class="producto__contenido">
+            <div class="producto__superior">
+              <div>
+                <h3 class="producto__nombre">Mediano</h3>
+                <span class="producto__porciones">🍰 14 porciones</span>
+              </div>
+              <div class="producto__precio">
+                <span>Precio</span>
+                Q 160
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- GRANDE OCULTO -->
+        <article class="producto oculto">
+          <div class="producto__contenido">
+            <h3 class="producto__nombre">Grande</h3>
+            <span class="producto__porciones">24 porciones</span>
+            <div class="producto__precio"><span>Precio</span>Q 220</div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- FERRERO -->
+    <section class="sabor">
+      <div class="sabor__cabecera">
+        <span>Sabor premium</span>
+        <h2>Ferrero</h2>
+      </div>
+
+      <div class="presentaciones">
+
+        <!-- PERSONAL -->
+        <article class="producto">
+          <div class="foto">
+            <img src="imagenes/ferrero-personal.jpeg" alt="Pastel Ferrero personal, 2 porciones">
+          </div>
+          <div class="producto__contenido">
+            <div class="producto__superior">
+              <div>
+                <h3 class="producto__nombre">Personal</h3>
+                <span class="producto__porciones">🍰 2 porciones</span>
+              </div>
+              <div class="producto__precio">
+                <span>Precio</span>
+                Q 45
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- PEQUEÑO -->
+        <article class="producto">
+          <div class="foto">
+            <img src="imagenes/ferrero-pequeño.jpeg" alt="Pastel Ferrero pequeño, 8 porciones">
+          </div>
+          <div class="producto__contenido">
+            <div class="producto__superior">
+              <div>
+                <h3 class="producto__nombre">Pequeño</h3>
+                <span class="producto__porciones">🍰 8 porciones</span>
+              </div>
+              <div class="producto__precio">
+                <span>Precio</span>
+                Q 250
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- MEDIANO -->
+        <article class="producto">
+          <div class="foto">
+            <img src="imagenes/ferrero-mediano.jpeg" alt="Pastel Ferrero mediano, 14 porciones">
+          </div>
+          <div class="producto__contenido">
+            <div class="producto__superior">
+              <div>
+                <h3 class="producto__nombre">Mediano</h3>
+                <span class="producto__porciones">🍰 14 porciones</span>
+              </div>
+              <div class="producto__precio">
+                <span>Precio</span>
+                Q 450
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="proximamente">
+      <h2>✨ Próximamente nuevos sabores... ✨</h2>
+      <p>Seguimos creando nuevas opciones para sorprenderte.</p>
+    </section>
+
+    <div class="cta">
+      <a
+        href="https://wa.me/50240792441?text=Hola%2C%20vi%20su%20cat%C3%A1logo%20de%20pasteles%20y%20quiero%20realizar%20un%20pedido."
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Realizar pedido por WhatsApp al 4079-2441"
+      >
+        💬 ¡Pídelo ya por WhatsApp!
+      </a>
+    </div>
+
+    <p class="numero-contacto">Pedidos por WhatsApp: 4079-2441</p>
+    <p class="nota">Precios expresados en quetzales. Disponibilidad sujeta a confirmación.</p>
+
+  </main>
+</body>
+</html>
